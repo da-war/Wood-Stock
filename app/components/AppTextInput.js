@@ -1,4 +1,11 @@
-import { StyleSheet, Text, View, Image, TextInput } from "react-native";
+import {
+  StyleSheet,
+  Text,
+  View,
+  Image,
+  TextInput,
+  TouchableOpacity,
+} from "react-native";
 import React from "react";
 
 import { MaterialCommunityIcons } from "@expo/vector-icons";
@@ -9,7 +16,11 @@ const AppTextInput = ({
   placeholder = "email",
   iconColor = COLORS.primary,
   color = COLORS.white,
+  value,
+  searchBtn,
   width,
+  onPressIcon,
+  searchIcon = "magnify",
   ...otherProps
 }) => {
   return (
@@ -21,8 +32,17 @@ const AppTextInput = ({
         placeholder={placeholder}
         placeholderTextColor={COLORS.gray}
         style={styles.input}
+        value={value}
         {...otherProps}
       />
+      {searchBtn && (
+        <MaterialCommunityIcons
+          name={searchIcon}
+          color={COLORS.gray}
+          size={25}
+          onPress={onPressIcon}
+        />
+      )}
     </View>
   );
 };

@@ -7,9 +7,11 @@ import { COLORS } from "./app/constants/theme";
 import AppNavigator from "./app/navigation/AppNavigator";
 import AuthNavigator from "./app/navigation/AuthNavigator";
 import { auth } from "./firebase";
+import { ProductProvider } from "./app/contexts/productsContext";
+import { UserProvider } from "./app/contexts/userContext";
 
 export default function App() {
-  const [user, setUser] = useState(null);
+  const [user, setUser] = useState();
   LogBox.ignoreAllLogs();
   React.useEffect(() => {
     firebaseAuthState();
@@ -42,16 +44,20 @@ export default function App() {
   });
 
   if (!fontsLoaded) return null;
-  if (!user) {
+  if (user) {
     return (
-      <NavigationContainer theme={theme}>
-        <AuthNavigator />
-      </NavigationContainer>
+      <UserProvider>
+        <ProductProvider>
+          <NavigationContainer theme={theme}>
+            <AppNavigator />
+          </NavigationContainer>
+        </ProductProvider>
+      </UserProvider>
     );
   } else {
     return (
       <NavigationContainer theme={theme}>
-        <AppNavigator />
+        <AuthNavigator />
       </NavigationContainer>
     );
   }

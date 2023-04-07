@@ -11,10 +11,11 @@ const HomeCard = ({
   title = "Card",
   icon = "add-circle-sharp",
   containerStyle,
+  onPress,
   m,
 }) => {
   return (
-    <TouchableOpacity style={[styles.topi, styly]}>
+    <TouchableOpacity onPress={onPress} style={[styles.topi, styly]}>
       <View style={[styles.mainContainer, containerStyle]}>
         {!m && <Ionicons name={icon} color={COLORS.white} size={50} />}
         {m && (

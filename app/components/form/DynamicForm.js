@@ -70,7 +70,6 @@ function DynamicForm({ formConfig }) {
               name={field.name}
               label={field.label}
               placeholder={field.label}
-              keyboardType={field.type}
             />
           );
         }

@@ -13,7 +13,7 @@ import { Colors } from "react-native/Libraries/NewAppScreen";
 
 const DropDown = ({
   data,
-  onSelectItem,
+  onSelectItem = () => {},
   placeholder = "Select Item",
   selectedItem,
 }) => {
@@ -43,9 +43,11 @@ const DropDown = ({
           <ScrollView showsVerticalScrollIndicator={false}>
             {data.map((item) => (
               <TouchableOpacity
+                key={item.id}
                 onPress={() => {
                   onSelectItem(item);
                   setShowOption(false);
+                  console.log("selected item", item);
                 }}
               >
                 <View style={styles.container}>

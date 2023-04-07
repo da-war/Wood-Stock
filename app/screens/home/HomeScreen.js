@@ -5,16 +5,28 @@ import AppHeader from "../../components/AppHeader";
 import { COLORS, FONTS } from "../../constants/theme";
 import HomeCard from "../../components/cards/HomeCard";
 
-const HomeScreen = () => {
+const HomeScreen = ({ navigation }) => {
   return (
     <AppScreen>
       <AppHeader title="Home" />
       <View style={styles.main}>
         <ScrollView showsVerticalScrollIndicator={false}>
           <Text style={styles.title}>Welcome to Wood-Stock</Text>
-          <HomeCard title="Erfassen" />
-          <HomeCard title="QR Scannen" icon="ios-qr-code" />
-          <HomeCard title="Lagerliste" m={true} icon="warehouse" />
+          <HomeCard
+            title="Erfassen"
+            onPress={() => navigation.navigate("select")}
+          />
+          <HomeCard
+            title="QR Scannen"
+            icon="ios-qr-code"
+            onPress={() => navigation.navigate("scan")}
+          />
+          <HomeCard
+            title="Lagerliste"
+            m={true}
+            icon="warehouse"
+            onPress={() => navigation.navigate("inventory")}
+          />
         </ScrollView>
       </View>
     </AppScreen>

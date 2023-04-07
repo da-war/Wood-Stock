@@ -1,7 +1,7 @@
 import React from "react";
 import { doc, getDoc } from "firebase/firestore";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import { db } from "../../firebase";
+import { auth, db } from "../../firebase";
 //create a context object
 const UserContext = React.createContext();
 //create a provider for components to consume and subscribe to changes
@@ -11,6 +11,10 @@ const UserProvider = ({ children }) => {
 
   React.useEffect(() => {
     getData();
+
+    setTimeout(() => {
+      console.log("User data loaded", user);
+    }, 10000);
   }, []);
 
   const getData = async () => {
