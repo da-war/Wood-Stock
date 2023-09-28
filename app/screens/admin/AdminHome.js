@@ -5,7 +5,7 @@ import { gStyle } from "../../global/styles";
 import AppHeader from "../../components/AppHeader";
 import AdminCard from "../../components/AdminCard";
 
-const AdminHome = () => {
+const AdminHome = ({ navigation }) => {
   return (
     <AppScreen>
       <AppHeader title="Admin Dashboard" />
@@ -13,12 +13,14 @@ const AdminHome = () => {
       <View style={gStyle.mainContainer}>
         <View style={styles.innerContainer}>
           <AdminCard
-            title="Users"
+            title="All Users"
             source={require("../../../assets/icons/man.png")}
+            onPress={() => navigation.navigate("allusers")}
           />
           <AdminCard
             title="Create User"
             source={require("../../../assets/icons/add-user.png")}
+            onPress={() => navigation.navigate("createuser")}
           />
         </View>
       </View>

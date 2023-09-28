@@ -6,15 +6,15 @@ import AllUsers from "../screens/admin/AllUsers";
 import CreateUser from "../screens/admin/CreateUser";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 
-const Tab = createNativeStackNavigator();
+const Stack = createNativeStackNavigator();
 
 const AdminNavigator = () => {
   return (
-    <Tab.Navigator screenOptions={{ headerShown: false }}>
-      <Tab.Screen name="Home" component={AdminHome} />
-      <Tab.Screen name="allusers" component={AllUsers} />
-      <Tab.Screen name="createuser" component={CreateUser} />
-    </Tab.Navigator>
+    <Stack.Navigator screenOptions={{ headerShown: false }}>
+      <Stack.Screen name="Home" component={AdminHome} />
+      <Stack.Screen name="allusers" component={AllUsers} />
+      <Stack.Screen name="createuser" component={CreateUser} />
+    </Stack.Navigator>
   );
 };
 

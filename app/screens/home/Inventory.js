@@ -1,4 +1,4 @@
-import { ScrollView, StyleSheet, Text, View } from "react-native";
+import { Modal, ScrollView, StyleSheet, Text, View } from "react-native";
 import React from "react";
 import AppScreen from "../../components/AppScreen";
 import AppHeader from "../../components/AppHeader";
@@ -7,10 +7,15 @@ import { COLORS, FONTS } from "../../constants/theme";
 import AppTextInput from "../../components/AppTextInput";
 import ProductItem from "../../components/ProductItem";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import { collection, getDocs } from "firebase/firestore";
+import { db } from "../../../firebase";
+
+import LottieView from "lottie-react-native";
 
 const Inventory = () => {
   const navigation = useNavigation();
   const [products, setProducts] = React.useState([]);
+  const [loading, setLoading] = React.useState(false);
 
   React.useLayoutEffect(() => {
     getProductsFromAsyncStorage();
@@ -27,32 +32,67 @@ const Inventory = () => {
     }
   };
 
+  const getData = async (name) => {
+    setLoading(true);
+
+    console.log("name", name);
+    //get the document from the firestore
+    const colName = name.toLowerCase();
+    try {
+      const colRef = collection(db, colName);
+      const docsSnap = await getDocs(colRef);
+      const data = [];
+      docsSnap.forEach((doc) => {
+        console.log(doc.data());
+        data.push(doc.data());
+      });
+      setLoading(false);
+
+      data.length &&
+        navigation.navigate("inventoryDetails", { data: data, name: name });
+    } catch (error) {
+      console.log(error);
+      setLoading(false);
+    }
+  };
+
   return (
-    <AppScreen>
-      <AppHeader
-        title="Inventory"
-        leftIcon="chevron-left"
-        onPressleft={() => navigation.goBack()}
-      />
-      <View style={styles.mainContainer}>
-        <Text style={styles.inventorySearchText}>
-          Search Products & View Inventory
-        </Text>
-        <View style={styles.searchContainer}>
-          <AppTextInput placeholder="Search Product" searchBtn={true} />
+    <>
+      <AppScreen>
+        <AppHeader
+          title="Inventory"
+          leftIcon="chevron-left"
+          onPressleft={() => navigation.goBack()}
+        />
+        <View style={styles.mainContainer}>
+          <Text style={styles.inventorySearchText}>
+            Search Products & View Inventory
+          </Text>
+          <View style={styles.searchContainer}>
+            <AppTextInput placeholder="Search Product" searchBtn={true} />
+          </View>
+          <View style={{ flex: 1 }}>
+            <ScrollView>
+              {products.map((product) => (
+                <ProductItem
+                  title={product.name}
+                  onPress={() => getData(product.name)}
+                />
+              ))}
+            </ScrollView>
+          </View>
         </View>
+      </AppScreen>
+      <Modal visible={loading}>
         <View style={{ flex: 1 }}>
-          <ScrollView>
-            {products.map((product) => (
-              <ProductItem
-                title={product.name}
-                onPress={() => navigation.navigate("inventoryDetails")}
-              />
-            ))}
-          </ScrollView>
+          <LottieView
+            loop
+            autoPlay
+            source={require("../../../assets/animations/find.json")}
+          />
         </View>
-      </View>
-    </AppScreen>
+      </Modal>
+    </>
   );
 };
 

@@ -4,7 +4,7 @@ import { COLORS, FONTS } from "../constants/theme";
 
 const InventoryComponent = ({ title = "Package", onPress }) => {
   return (
-    <TouchableOpacity style={styles.mainContainer}>
+    <TouchableOpacity onPress={onPress} style={styles.mainContainer}>
       <Text style={styles.title}>{title}</Text>
     </TouchableOpacity>
   );
@@ -17,8 +17,9 @@ const styles = StyleSheet.create({
     padding: 15,
     backgroundColor: COLORS.white,
     borderWidth: 1,
-    borderColor: COLORS.border,
+    borderColor: COLORS.tertiary,
     borderRadius: 10,
+    marginVertical: 3,
   },
   title: {
     fontFamily: FONTS.bold,

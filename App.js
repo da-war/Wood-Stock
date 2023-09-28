@@ -9,6 +9,7 @@ import AuthNavigator from "./app/navigation/AuthNavigator";
 import { auth } from "./firebase";
 import { ProductProvider } from "./app/contexts/productsContext";
 import { UserProvider } from "./app/contexts/userContext";
+import { StateProvider } from "./app/contexts/StateContext";
 
 export default function App() {
   const [user, setUser] = useState();
@@ -46,13 +47,15 @@ export default function App() {
   if (!fontsLoaded) return null;
   if (user) {
     return (
-      <UserProvider>
-        <ProductProvider>
-          <NavigationContainer theme={theme}>
-            <AppNavigator />
-          </NavigationContainer>
-        </ProductProvider>
-      </UserProvider>
+      <StateProvider>
+        <UserProvider>
+          <ProductProvider>
+            <NavigationContainer theme={theme}>
+              <AppNavigator />
+            </NavigationContainer>
+          </ProductProvider>
+        </UserProvider>
+      </StateProvider>
     );
   } else {
     return (

@@ -12,5 +12,6 @@ const styles = StyleSheet.create({
   text: {
     fontFamily: FONTS.light,
     color: COLORS.danger,
+    fontSize: 8,
   },
 });

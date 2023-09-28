@@ -6,12 +6,12 @@ import { getFirestore } from "firebase/firestore";
 import { getStorage } from "firebase/storage";
 
 const firebaseConfig = {
-  apiKey: "AIzaSyCS7BwbcN-Hr5kg2YBIwY0fInrgZdWxLYo",
-  authDomain: "wood-stock-249df.firebaseapp.com",
-  projectId: "wood-stock-249df",
-  storageBucket: "wood-stock-249df.appspot.com",
-  messagingSenderId: "469041303045",
-  appId: "1:469041303045:web:9a5a99ffe9a4905f6ad66c",
+  apiKey: "AIzaSyD6q2yO11mGD9CgHQOjXOR3ue55DXkGdgw",
+  authDomain: "woodstock-4ab94.firebaseapp.com",
+  projectId: "woodstock-4ab94",
+  storageBucket: "woodstock-4ab94.appspot.com",
+  messagingSenderId: "337604388424",
+  appId: "1:337604388424:web:9f3d446a86fedecd4e5a7d",
 };
 
 // Initialize Firebase

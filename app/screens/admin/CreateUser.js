@@ -1,4 +1,4 @@
-import { StyleSheet, Text, View } from "react-native";
+import { Modal, StyleSheet, Text, View } from "react-native";
 import React from "react";
 import AppScreen from "../../components/AppScreen";
 import AppHeader from "../../components/AppHeader";
@@ -14,6 +14,8 @@ import { auth, db } from "../../../firebase";
 import moment from "moment";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
+import LottieView from "lottie-react-native";
+
 const validationSchema = Yup.object().shape({
   name: Yup.string().required().label("Name"),
   email: Yup.string().required().email().label("Email"),
@@ -22,7 +24,7 @@ const validationSchema = Yup.object().shape({
 const initialValues = { name: "", email: "", password: "" };
 
 const CreateUser = ({ navigation }) => {
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = React.useState(false);
   const [isAdmin, setIsAdmin] = React.useState(false);
   const handleCreateUser = (values) => {
     setLoading(true);
@@ -64,28 +66,52 @@ const CreateUser = ({ navigation }) => {
       });
   };
   return (
-    <AppScreen>
-      <AppHeader
-        title="Create User"
-        leftIcon="chevron-left"
-        onPressleft={() => navigation.goBack()}
-      />
-      <View style={gStyle.mainContainer}>
-        <Text style={gStyle.gTitle}>Create User</Text>
-        <AppForm
-          validationSchema={validationSchema}
-          initialValues={initialValues}
-          onSubmit={(values) => handleCreateUser(values)}
-        >
-          <AppFormField />
-          <AppFormField />
-          <AppFormField />
-          <View />
-          <SubmitButton title="Create User" />
-        </AppForm>
-      </View>
-    </AppScreen>
+    <>
+      <AppScreen>
+        <AppHeader
+          title="Create User"
+          leftIcon="chevron-left"
+          onPressleft={() => navigation.goBack()}
+        />
+        <View style={gStyle.mainContainer}>
+          <Text style={gStyle.gTitle}>Create User</Text>
+          <AppForm
+            validationSchema={validationSchema}
+            initialValues={initialValues}
+            onSubmit={(values) => handleCreateUser(values)}
+          >
+            <AppFormField name="name" placeholder="Name" />
+            <AppFormField name="email" placeholder="Email" />
+            <AppFormField
+              name="password"
+              placeholder="Password"
+              secureTextEntry
+            />
+            <View />
+            <SubmitButton title="Create User" />
+          </AppForm>
+        </View>
+      </AppScreen>
+
+      <Modal visible={loading}>
+        <View style={styles.mainModal}>
+          <LottieView
+            loop
+            autoPlay
+            source={require("../../../assets/animations/loading.json")}
+          />
+        </View>
+      </Modal>
+    </>
   );
 };
 
 export default CreateUser;
+
+const styles = StyleSheet.create({
+  mainModal: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+  },
+});

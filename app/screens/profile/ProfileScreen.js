@@ -1,4 +1,11 @@
-import { Alert, ScrollView, StyleSheet, Text, View } from "react-native";
+import {
+  Alert,
+  Dimensions,
+  ScrollView,
+  StyleSheet,
+  Text,
+  View,
+} from "react-native";
 import React from "react";
 import AppScreen from "../../components/AppScreen";
 import AppHeader from "../../components/AppHeader";
@@ -8,13 +15,39 @@ import HorizontalCard from "../../components/cards/HorizontalCard";
 import AppButton from "../../components/btns/AppButton";
 import { auth } from "../../../firebase";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import CustomSwitchButton from "../../components/CustomSwitchButton";
+import { StateContext } from "../../contexts/StateContext";
 
 const ProfileScreen = ({ navigation }) => {
   const [user, setUser] = React.useState({});
+  const { admin, setAdmin } = React.useContext(StateContext);
+  const [isAdminMode, setIsAdminMode] = React.useState(false);
+
+  const handleAdminChange = () => {
+    if (admin === "admin") {
+      //set mode to admin in the async storage
+      AsyncStorage.setItem("mode", "nuser");
+      setAdmin("nuser");
+      setIsAdminMode(false);
+    } else {
+      //set mode to user in the async storage
+      AsyncStorage.setItem("mode", "admin");
+      setAdmin("admin");
+      setIsAdminMode(true);
+    }
+  };
 
   React.useLayoutEffect(() => {
     getUserFromAsyncStorage();
+    settingAdmin();
   }, [navigation]);
+  const settingAdmin = () => {
+    if (admin === "admin") {
+      setIsAdminMode(true);
+    } else {
+      setIsAdminMode(false);
+    }
+  };
 
   const getUserFromAsyncStorage = async () => {
     const user = await AsyncStorage.getItem("user");
@@ -65,6 +98,14 @@ const ProfileScreen = ({ navigation }) => {
 
             <Text style={styles.title}>{user.name}</Text>
             <Text style={styles.subTitle}>{user.email}</Text>
+
+            <View style={styles.absoluteContainer}>
+              <Text style={styles.adminText}>Admin</Text>
+              <CustomSwitchButton
+                isOn={isAdminMode}
+                onChangeSwitch={() => handleAdminChange()}
+              />
+            </View>
           </View>
 
           <View style={styles.bottomContainer}>
@@ -82,7 +123,11 @@ const ProfileScreen = ({ navigation }) => {
               leftIcon="database-edit"
               title="Produkt bearbeiten"
             />
-            <HorizontalCard leftIcon="text-box-search" title="Statistiken" />
+            <HorizontalCard
+              leftIcon="text-box-search"
+              title="Statistiken"
+              onPress={() => navigation.navigate("stats")}
+            />
             <HorizontalCard leftIcon="" title="Benachrichtigungen" />
           </View>
 
@@ -98,6 +143,20 @@ const ProfileScreen = ({ navigation }) => {
 export default ProfileScreen;
 
 const styles = StyleSheet.create({
+  absoluteContainer: {
+    position: "absolute",
+    right: 20,
+    top: 20,
+    width: Dimensions.get("window").width / 3.5,
+    justifyContent: "space-between",
+    flexDirection: "row",
+    alignItems: "center",
+  },
+  adminText: {
+    color: COLORS.white,
+    fontFamily: FONTS.bold,
+    fontSize: 15,
+  },
   bottomContainer: {
     marginVertical: 15,
   },

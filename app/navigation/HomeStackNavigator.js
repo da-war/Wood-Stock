@@ -10,6 +10,7 @@ import InventoryDetailsScreen from "../screens/home/InventoryDetailsScreen";
 import ProductForm from "../screens/home/ProductForm";
 import QrCamera from "../screens/home/QrCamera";
 import QrScanDetails from "../screens/home/QrScanDetails";
+import InventoryItemDetails from "../screens/home/InventoryItemDetails";
 
 const Stack = createNativeStackNavigator();
 
@@ -25,6 +26,10 @@ const HomeStackNavigator = () => {
       <Stack.Screen
         name="inventoryDetails"
         component={InventoryDetailsScreen}
+      />
+      <Stack.Screen
+        name="inventoryItemDetails"
+        component={InventoryItemDetails}
       />
       <Stack.Screen name="form" component={ProductForm} />
     </Stack.Navigator>

@@ -12,11 +12,12 @@ import * as Print from "expo-print";
 import * as Sharing from "expo-sharing";
 import * as FileSystem from "expo-file-system";
 import { doc, setDoc } from "firebase/firestore";
-import { db } from "../../../firebase";
+import { auth, db } from "../../../firebase";
 import { randomString } from "../../global/functions";
 
 import LottieView from "lottie-react-native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import moment from "moment";
 
 const ProductForm = ({ navigation, route }) => {
   const data = route.params;
@@ -53,7 +54,12 @@ const ProductForm = ({ navigation, route }) => {
       }
     }
 
-    const allData = { ...formData, id: id };
+    const allData = {
+      ...formData,
+      id: id,
+      checkedInAt: moment().format("MMMM Do YYYY, h:mm:ss a"),
+      user: auth.currentUser.uid,
+    };
     console.log("All the data", allData);
 
     //set a doc in firestore in collection {title}

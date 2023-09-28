@@ -1,4 +1,11 @@
-import { Modal, ScrollView, StyleSheet, Text, View } from "react-native";
+import {
+  Modal,
+  RefreshControl,
+  ScrollView,
+  StyleSheet,
+  Text,
+  View,
+} from "react-native";
 import React from "react";
 import AppScreen from "../../components/AppScreen";
 import AppHeader from "../../components/AppHeader";
@@ -12,36 +19,14 @@ import InventoryComponent from "../../components/InventoryComponent";
 import AppTextInput from "../../components/AppTextInput";
 
 const InventoryDetailsScreen = ({ navigation, route }) => {
-  const [title, setTitle] = React.useState("Product");
   const data = route.params;
-  const [inventory, setInventory] = React.useState([]);
+  const [inventory, setInventory] = React.useState(data.data);
   const [loadInventory, setLoadInventory] = React.useState(false);
   const [theData, setTheData] = React.useState([]);
+  const [title, setTitle] = React.useState(data.name);
 
-  React.useLayoutEffect(() => {
-    if (data) {
-      setTitle(data.title);
-    }
-    getAllPackages();
-  }, [data]);
-
-  const getAllPackages = async () => {
-    setLoadInventory(true);
-    try {
-      const colRef = collection(db, title);
-      const snapshot = await getDocs(colRef);
-      var myData = [];
-      //store the data in an array myData
-      snapshot.forEach((doc) => {
-        myData.push({ ...doc.data() });
-      });
-      setInventory(myData);
-      setLoadInventory(false);
-    } catch (error) {
-      console.log(error);
-      setLoadInventory(false);
-    }
-  };
+  const [toShow, setToShow] = React.useState(false);
+  const [numberOfPackages, setNumberOfPackages] = React.useState(0);
 
   const handleSearch = (value) => {
     if (!value.length) {
@@ -61,6 +46,8 @@ const InventoryDetailsScreen = ({ navigation, route }) => {
     }
   };
 
+  //useCallback which updates component rendering when there is change in toShow
+
   return (
     <>
       <AppScreen>
@@ -73,6 +60,11 @@ const InventoryDetailsScreen = ({ navigation, route }) => {
           <ScrollView showsVerticalScrollIndicator={false}>
             <Text style={styles.name}>Product Inventory</Text>
             {inventory.length > 0 && (
+              <Text style={styles.numberOfPackages}>
+                Total Packages {numberOfPackages}
+              </Text>
+            )}
+            {inventory.length > 0 && (
               <View style={{ marginHorizontal: 20, marginVertical: 10 }}>
                 <AppTextInput
                   placeholder="Suche nach Stücke"
@@ -81,36 +73,18 @@ const InventoryDetailsScreen = ({ navigation, route }) => {
               </View>
             )}
             <View style={gStyle.mainContainer}>
-              {inventory.length === 0 && (
-                <View
-                  style={{
-                    flex: 1,
-                    justifyContent: "center",
-                    alignItems: "center",
-                  }}
-                >
-                  <Text>No Packages Added Yet!</Text>
-                  <View style={{ flex: 1 }}>
-                    <LottieView
-                      source={require("../../../assets/animations/empty.json")}
-                      autoPlay
-                      loop
-                      autoSize
-                      speed={0.5}
-                      style={{ width: 200, height: 200 }}
-                    />
-                  </View>
-                </View>
-              )}
               {inventory.map((item, index) => (
                 <View key={index}>
-                  <InventoryComponent />
+                  <InventoryComponent
+                    onPress={() => navigation.navigate("inventoryItemDetails")}
+                  />
                 </View>
               ))}
             </View>
           </ScrollView>
         </View>
       </AppScreen>
+
       <Modal visible={loadInventory}>
         <View
           style={{ flex: 1, justifyContent: "center", alignItems: "center" }}
@@ -138,5 +112,10 @@ const styles = StyleSheet.create({
     color: COLORS.gray,
     textAlign: "center",
     marginVertical: 12,
+  },
+  numberOfPackages: {
+    fontSize: 13,
+    color: COLORS.gray,
+    textAlign: "center",
   },
 });
